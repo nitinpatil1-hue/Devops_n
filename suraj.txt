@@ -1,0 +1,1167 @@
+
+
+versioning control software
+--------------------------------
+
+Question: difference between git(dvcs) vs svn vs mercurial vs cvs
+
+git == distributed versioning control system
+
+
+what is repository:
+
+a repo is a central storage contains app code, versioning, config, readme files, record of changes, branches, tags, commit info etc
+
+repository brands = Git, SVN, Mercurial, BitBucket, CVS, Gitea, Gitlab, 
+
+What does git does:
+----------------------
+- Git is distributed version control system used to track manage and manitain changes in source code.
+- git allows multiple developers to work on same project
+- in git main folder called as "Working Directory"
+
+The working directory (also called the working tree) is the main folder on your computer where you see, create, and edit your project files
+
+.git contains its internal data i.e. HEAD, Config, description ,hooks, info, objects, refs ----> its db files
+
+Question: * purpose of these files/directories??? *
+
+- GIT is not a service, doesnt contains any port
+- GIT does not continue monitor/scan/track the working directory beacuse its not a service
+- .git has 3 main sections --> working directory, staging area, commit
+- to add files in staging area, needs to execute the "git add" command
+
+	example: # git add . (complete directory)
+			 # git add <file1> <file2>
+
+			 # git status (to view track / untrack files which needs to be added in staging area)
+
+
+			 # git add contact.css
+				root@ip-172-31-38-193:/opt/travel/project# git status
+				On branch master
+
+				No commits yet
+
+				Changes to be committed:
+				  (use "git rm --cached <file>..." to unstage)
+				        new file:   contact.css
+
+				Untracked files:
+				  (use "git add <file>..." to include in what will be committed)
+				        index.html
+				        random.html
+				        trv.image
+
+        	 #  git rm --cached contact.css (to remove files from staging area)
+
+Question: Difference between working directory, statging area, commit:
+Question: how to Exclude some files from git add 
+
+Commit the changes:
+
+		# git commit -m "This is my first travel project"
+	[master (root-commit) 0a6fd1f] This is my first travel project
+	 Committer: root <root@ip-172-31-38-193.ap-south-1.compute.internal>
+	Your name and email address were configured automatically based
+	on your username and hostname. Please check that they are accurate.
+	You can suppress this message by setting them explicitly. Run the
+	following command and follow the instructions in your editor to edit
+	your configuration file:
+
+	    git config --global --edit
+
+	After doing this, you may fix the identity used for this commit with:
+
+	    git commit --amend --reset-author
+
+	 4 files changed, 10 insertions(+)
+	 create mode 100644 contact.css
+	 create mode 100644 index.html
+	 create mode 100644 random.html
+	 create mode 100644 trv.image
+
+The files which are in staging area will only be used in commit
+
+		# git show (to view files from commit area)
+
+		# git show
+		commit 0a6fd1f9b2374e24e02a412b59d9bc7a9c740641 (HEAD -> master)
+		Author: root <root@ip-172-31-38-193.ap-south-1.compute.internal>
+		Date:   Wed Aug 19 17:22:28 2026 +0000
+
+		    This is my first travel project
+
+		diff --git a/contact.css b/contact.css
+		new file mode 100644
+		index 0000000..e69de29
+		diff --git a/index.html b/index.html
+		new file mode 100644
+		index 0000000..e0f278b
+		--- /dev/null
+		+++ b/index.html
+		@@ -0,0 +1,10 @@
+		
+		
+		+<!DOCTYPE html>
+		+<html>
+		+<head>
+		+    <title>My First Web Page</title>
+		+</head>
+		+<body>
+		+    <h1>Welcome to My Website</h1>
+		+    <p>This is a simple paragraph of text.</p>
+		+</body>
+		+</html>
+		diff --git a/random.html b/random.html
+		new file mode 100644
+		index 0000000..e69de29
+		diff --git a/trv.image b/trv.image
+		new file mode 100644
+		index 0000000..e69de29
+		
+22082026
+
+
+Git also called as SEM (Source Code Management Software / repository management software / versioning management software)
+
+- working directory --> staging area (test stage) --> commit
+- when performed "git add <filename>" its gets copied to stating area and can be restored back to working directory if the original copy gets deleted, so staging area can be used as a backup.
+
+
+whats the purpose of staging area:
+- The staging area is a rough draft or a loading dock for your next save point.Instead of saving all your work at once, you pick and choose exactly which changes go into your next commit.
+- to select exactly what you want to commit
+- we can later restore files back to working directory if not needed
+
+	Working Directory: Changes you are making -----> touch <filename>
+	Staging area: changes selected for the next commit ------> git add <filename>
+	commit: permanently recorded commits -------> git commit -m "message"
+
+
+- to remove files from staging area:
+
+		$ git rm --cached <filename>
+
+-----
+
+git also tracks the file if it gets modified in working directory, which was earlier pushed to staging area:
+
+		# git status
+		On branch master
+		Changes to be committed:
+		  (use "git restore --staged <file>..." to unstage)
+			new file:   index2.html
+			new file:   suraj.html
+
+		root@ip-172-31-38-71:/opt/travel# vi suraj.html 
+		
+		root@ip-172-31-38-71:/opt/travel# git status
+		On branch master
+		Changes to be committed:
+		  (use "git restore --staged <file>..." to unstage)
+			new file:   index2.html
+			new file:   suraj.html
+
+		Changes not staged for commit:
+		  (use "git add <file>..." to update what will be committed)
+		  (use "git restore <file>..." to discard changes in working directory)
+			modified:   suraj.html 														<<<<<<<<--------------------------
+
+Hence needs to perform the "$ git add ." again.
+
+-x-
+
+git restore helps to restore files from staging area to working directory:
+
+		$ git restore <filename>
+		$ git restore . <<<<------------- all files
+
+-----
+
+once performed git commit, commit id gets generated:
+
+		# git commit -m "update to the project"
+		[master 05bb624] update to the project
+		 Committer: root <root@ip-172-31-38-71.ap-south-1.compute.internal>
+
+		2 files changed, 1 insertion(+)
+		 create mode 100644 index2.html
+		 create mode 100644 suraj.html
+
+-----
+
+to set the identity:
+
+		$ git config --global user.name <name>
+		$ git config --global user.email <email id>
+
+files which gets edited:
+
+		/root/.gitconfig 
+
+		# cat /root/.gitconfig 
+		# This is Git's per-user configuration file.
+		[user]
+		# Please adapt and uncomment the following lines:
+		#	name = root
+		#	email = root@ip-172-31-38-71.ap-south-1.compute.internal
+
+
+/root/.gitconfig  ----> stores username, password
+/opt/travel/.git -----> stores repository details
+
+-----
+
+git show:
+
+		# git show
+		commit 05bb6246ee0089b301ba37eb0adeb07652570e3d (HEAD -> master)
+		Author: root <root@ip-172-31-38-71.ap-south-1.compute.internal>
+		Date:   Sat Aug 22 15:49:19 2026 +0000
+
+		    update to the project
+
+		diff --git a/index2.html b/index2.html
+		new file mode 100644
+		index 0000000..e69de29
+		diff --git a/suraj.html b/suraj.html
+		new file mode 100644
+		index 0000000..23a2812
+		--- /dev/null
+		+++ b/suraj.html
+		@@ -0,0 +1 @@
+		+Hi this is test
+
+- git show will show only the recent commit.
+
+- to view all the commits:
+
+		$ git ls-files ------> will show all the committed files
+
+		bk.js
+		index.html
+		index2.html
+		suraj.html
+
+
+		$ git log 	   ------> will show all the commit ids
+
+		commit f854e2e010b670775337ca373bc07c3a394c2974 (HEAD -> master)
+		Author: root <root@ip-172-31-38-71.ap-south-1.compute.internal>
+		Date:   Sat Aug 22 16:05:54 2026 +0000
+
+		    This is 2nd commit bk.js
+
+		commit 05bb6246ee0089b301ba37eb0adeb07652570e3d
+		Author: root <root@ip-172-31-38-71.ap-south-1.compute.internal>
+		Date:   Sat Aug 22 15:49:19 2026 +0000
+
+		    update to the project
+
+		commit 9c6c69e6b40e52df724355543233227561170220
+		Author: root <root@ip-172-31-38-71.ap-south-1.compute.internal>
+		Date:   Sat Aug 22 14:43:47 2026 +0000
+
+		    this is my first travel project
+
+
+
+-----
+
+how to retrieve files from commit area:
+
+-----
+
+what if working directory get deleted ?? 
+- it has the .git db and its related files.
+- need to store this files to the centralized server, just like github (but it will only have the committed files)
+
+to upload it to github:
+
+		$ git push
+
+		$ git commit 
+
+-----
+
+What if there is no internal access and still want to use the github, basically how to use it in intranet (locally)
+
+Github is being managed by Microsoft
+
+
+-----
+
+How to upload code to github
+
+- Create Github Account:
+- Create repository
+- Get the project url i.e.  https://github.com/raskars/pharmaproject.git
+
+		# git remote add origin https://github.com/raskars/pharmaproject.git
+		
+		# cat /opt/travel/.git/config 
+		[core]
+			repositoryformatversion = 0
+			filemode = true
+			bare = false
+			logallrefupdates = true
+		[remote "origin"]
+			url = https://github.com/raskars/pharmaproject.git
+			fetch = +refs/heads/:refs/remotes/origin/
+
+- One project will have only 1 URL.
+- Now push the code to github
+
+		# git push -u origin <branch name>
+		# git push -u origin master
+
+		# git push -u origin master
+		Username for 'https://github.com': raskars
+		Password for 'https://raskars@github.com': 
+		remote: Invalid username or token. Password authentication is not supported for Git operations.
+		fatal: Authentication failed for 'https://github.com/raskars/pharmaproject.git/'
+
+- If error came, needs to generate the token:
+
+		settings --> Developer Settings --> personal access token --> Classic --> Generate new token
+
+- use the token during login:  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
+
+		# git push -u origin master
+		Username for 'https://github.com': raskars
+		Password for 'https://raskars@github.com': 
+		Enumerating objects: 9, done.
+		Counting objects: 100% (9/9), done.
+		Delta compression using up to 2 threads
+		Compressing objects: 100% (6/6), done.
+		Writing objects: 100% (9/9), 835 bytes | 835.00 KiB/s, done.
+		Total 9 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+		remote: Resolving deltas: 100% (1/1), done.
+		To https://github.com/raskars/pharmaproject.git
+		 * [new branch]      master -> master
+		branch 'master' set up to track 'origin/master'.
+		
+23082026
+
+Difference between Github and local laptop repository:
+- We can share the github repository, Requires internet connection 
+
+	Quick Comparison:
+
+	Feature				Local Laptop Repository 			GitHub Repository
+	Location 			Your computer's internal storage 	Cloud servers (Internet)
+	Internet Need 		Works entirely offline 				Requires an internet connection
+	Access 				Private to you only 				Public or shared with a team
+	Core Software 		Managed using Git 					Managed using Git + web platform
+	Commands Used 		git add, git commit 				git push, git pull, git fetch
+
+- We can also share the local repository to other developers without github (dcvs)
+
+- In order to share the code with other developer, need to perform the # git clone
+
+- exact procedure for other developers:
+
+	$ mkdir /mnt/harry
+	$ cd /mnt/harry
+	# git clone https://github.com/raskars/pharmaproject.git
+	Cloning into 'pharmaproject'...
+	remote: Enumerating objects: 9, done.
+	remote: Counting objects: 100% (9/9), done.
+	remote: Compressing objects: 100% (5/5), done.
+	remote: Total 9 (delta 1), reused 9 (delta 1), pack-reused 0 (from 0)
+	Receiving objects: 100% (9/9), done.
+	Resolving deltas: 100% (1/1), done.
+
+------------
+Homework
+what is git clone ssh
+what is PR
+what is git pull vs git push vs git fetch
+what is -u (uppstream)
+Try gitlab
+what is alias record?
+------------
+
+- When both developers pushes code from their end ---> they need to merge the code i.e. "$ git merge"
+- To merge the code, PR request needs to be raised (pull request)
+- Once we adds any new pages,files, the other developers needs to perform the git pull
+
+	# cd pharmaproject/
+	# git pull 
+	remote: Enumerating objects: 3, done.
+	remote: Counting objects: 100% (3/3), done.
+	remote: Compressing objects: 100% (1/1), done.
+	remote: Total 2 (delta 1), reused 2 (delta 1), pack-reused 0 (from 0)
+	Unpacking objects: 100% (2/2), 232 bytes | 232.00 KiB/s, done.
+	From https://github.com/raskars/pharmaproject
+	   f854e2e..d90dcb6  master     -> origin/master
+	Updating f854e2e..d90dcb6
+	Fast-forward
+	 contacts.js | 0
+	 1 file changed, 0 insertions(+), 0 deletions(-)
+	 create mode 100644 contacts.js
+
+- similarly, if harry creates any files, he needs to perform, git add, git push so that new files will reflect at github
+- We can configure github locally (intranet) using gitlab, bitbucket etc
+
+-----
+
+
+We can also access this code using our private webserver i.e. deploying the code to the webserver
+
+	$ apt install nginx
+	$ cd /var/www/html	
+	# git clone https://github.com/raskars/pharmaproject.git
+	Cloning into 'pharmaproject'...
+	remote: Enumerating objects: 11, done.
+	remote: Counting objects: 100% (11/11), done.
+	remote: Compressing objects: 100% (6/6), done.
+	remote: Total 11 (delta 2), reused 11 (delta 2), pack-reused 0 (from 0)
+	Receiving objects: 100% (11/11), done.
+	Resolving deltas: 100% (2/2), done.
+
+	# ls
+	index.nginx-debian.html  pharmaproject
+	
+	# curl ifconfig.me
+	13.233.162.125
+
+	# curl http://localhost/pharmaproject/
+
+	<!DOCTYPE html>
+	<html>
+	<body>
+
+	<h1>My First Heading</h1>
+	<p>My first paragraph.</p>
+
+	</body>
+	</html>
+
+- If we want to edit any exisiting files or wants to add any new files:
+
+	from developer machine
+	# touch newindex.html
+	# git add .
+	# git commit
+	# git push -u origin master
+
+	this might fail
+
+	proper process is to merge the code
+
+-----
+
+what is alias record?
+- An alias record is a custom Domain Name System (DNS) record that lets you point your root domain (like example.com) to a hostname
+- An ALIAS record is a special type of DNS setting that lets you point your main website address (like example.com) to another domain name instead of a fixed IP address.
+
+-----
+
+GITHUB FLOW:
+
+Developer
+- git init CODE ----›S CODE --- LINUX - VI ---- code edit-→→ git add ---> staging area → git commit ---› commit area →- GITHUB --- REPOSITORY ADD --- FOLDER -→ Github URL PROVIDE
+
+local laptop
+git remote add (URL SAVE) -- git push ---→ Ineternet -- GITHUB --→ GITHUB ---→ WEBSERVER → /var/www/html/ git clone code clone /var/www/html/pharmaproject/index.html
+
+End user http://webserverip/pharmaproject --> Fetch page
+
+-----
+
+BRM: Business Resource Manager
+
+Git Branching Strategy:
+
+Every branch tree is a different project
+
+
+			makemytrip
+				|
+			------------
+			|		   |
+		Branch1 	Branch2
+
+
+
+			  pharmaproject 
+					|
+			-----------------
+			|		   	    |
+		Master (main) 	Branch2
+
+	# git branch
+	* master
+
+- If initializes from github branch called as main
+- if initializes from laptop then master gets created 
+- Every project has its own features i.e. login page, contacts page, etc
+- and for all those features a new sub branch gets created.
+- every sub branch also contains the data from main branch
+
+	# git branch -a
+	* master
+	  remotes/origin/HEAD -> origin/master
+	  remotes/origin/master
+
+- How to create a new branch
+
+	# git branch contacts
+	# git branch sports
+	# git branch -a
+	  contacts
+	* master
+	  sports
+	  remotes/origin/HEAD -> origin/master
+	  remotes/origin/master
+
+- switch the branch
+
+	# git checkout contacts 
+	Switched to branch 'contacts'
+
+	# git branch -a
+	* contacts
+	  master
+	  sports
+	  remotes/origin/HEAD -> origin/master
+	  remotes/origin/master
+
+	# touch random.html
+	# git status
+	On branch contacts
+	Untracked files:
+	  (use "git add <file>..." to include in what will be committed)
+		random.html
+
+	nothing added to commit but untracked files present (use "git add" to track)
+
+- files created in branches will not be visible in main branch
+
+	# git add .
+	# git commit -m "this is the contacts update"
+
+- again switched to master branch:
+
+	# git checkout master
+	Switched to branch 'master'
+	Your branch is up to date with 'origin/master'.
+
+- it will not show the random.html as it is created in contacts branch
+
+----
+
+Merge concept:
+
+- needs to merge data from main branch to contacts branch 
+
+	# git merge contacts
+	Updating d90dcb6..0afe660
+	Fast-forward
+	 random.html | 0
+	 1 file changed, 0 insertions(+), 0 deletions(-)
+	 create mode 100644 random.html
+
+- now how to upload this branch data to github:
+
+	# ls -lrth
+	total 8.0K
+	-rw-r--r-- 1 root root   0 Aug 23 06:10 index2.html
+	-rw-r--r-- 1 root root   0 Aug 23 06:10 bk.js
+	-rw-r--r-- 1 root root 102 Aug 23 06:10 index.html
+	-rw-r--r-- 1 root root  16 Aug 23 06:10 suraj.html
+	-rw-r--r-- 1 root root   0 Aug 23 06:10 contacts.js
+	-rw-r--r-- 1 root root   0 Aug 23 08:10 random.html   <--------------- file appeared
+	
+	
+	
+
+
+===================================================================================================================================
+05092026
+
+
+How to add SSH template (These are global settings)
+
+jenkins -> manage jenkins -> system -> SSH Server (Add name, IP, Username, Remote Directory) -> Advanced -> add key -> then test the connection (it should succeed)
+-If failed, verify username, security group rules etc.
+
+Once done, we need to add the SSH settings at the repository level as well.
+
+go to project -> Configure -> In Environment Section -> Select "Send files or execute commands over SSH before the build starts" -> then add name, source files (add * means download all the files), Remote Directory (where you want to deploy the files e.g. /var/www/html) -> save
+
+this might fail with permission issue, as /var/www/html needs the write permission from others, 
+
+	
+	# chmod o+w /var/www/html/
+
+Then build now from jenkins repository, 
+
+
+	Started by user Suraj
+	Running as SYSTEM
+	Building in workspace /var/lib/jenkins/workspace/a-projectclone
+	The recommended git tool is: NONE
+	No credentials specified
+	 > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/a-projectclone/.git # timeout=10
+	Fetching changes from the remote Git repository
+	 > git config remote.origin.url https://github.com/raskars/financeproj.git # timeout=10
+	Fetching upstream changes from https://github.com/raskars/financeproj.git
+	 > git --version # timeout=10
+	 > git --version # 'git version 2.53.0'
+	 > git fetch --tags --force --progress -- https://github.com/raskars/financeproj.git +refs/heads/:refs/remotes/origin/ # timeout=10
+	 > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+	Checking out Revision 7709b5ada81b040817765da8fbe3296b56dc2c3b (refs/remotes/origin/main)
+	 > git config core.sparsecheckout # timeout=10
+	 > git checkout -f 7709b5ada81b040817765da8fbe3296b56dc2c3b # timeout=10
+	Commit message: "this is login update"
+	 > git rev-list --no-walk 7709b5ada81b040817765da8fbe3296b56dc2c3b # timeout=10
+	SSH: Connecting from host [ip-172-31-38-71]
+	SSH: Connecting with configuration [testing ssh connection] ...
+	SSH: Disconnecting configuration [testing ssh connection] ...
+	SSH: Transferred 6 file(s)
+	Finished: SUCCESS
+
+
+	# cd /var/www/html/
+	
+	# ls
+	README.md  add.img  index.html  index.java  index.nginx-debian.html  mm.htm  num.css
+	root@ip-172-31-36-98:/var/www/html# 
+
+As seen above Files downloaded from the github.
+
+If build fails, check console output
+
+
+----
+
+git clone -> 1st step
+send files -> 2nd step
+
+----
+
+The above was the the example of Freestyle Project.
+
+----
+
+Task: How to run the project via Pipeline
+
+
+- PIPELINE: automated sequence of steps that takes application code from development, testing, deployment
+
+- Jenkins -> Add new item -> name (my a-firstpipline) -> Pipeline
+
+- Pipeline -> CODE -> SCRIPT -> when we write anything in script filed, jenkins files gets created at the background, it has its structure like blocks, directives etc, it has JAVA Based structure and used the groovy language (its a java based language)
+
+- We can also shell script instead of groovy language.
+- Adding code:
+
+	There are 2 methods to write the pipeline, 
+	1. Scripted Pipeline
+	2. Declarative Pipeline
+
+Difference between Scripted & Declarative Pipeline:
+
+- If the code starts with word "pipeline" then its declarative pipeline.
+- Scripted pipeline will start with "node" word.
+
+
+- Pipeline block starts with '{' and ends with '}':
+
+example:
+
+		pipeline{
+
+
+		}
+		
+
+- we can add more blocks to pipeline, these are called as stages:
+
+		pipeline{
+
+			stages{
+
+				stage1 ('print'){
+
+					step1 (actual code)
+
+				}
+
+				stage2 ('cloning'){
+
+					step2 ()
+				}
+
+				stage3 ('deploy'){
+
+				}
+		}
+	}
+
+
+Blocks:
+
+Pipeline
+	|- 
+- these stages are basically the functions, meaning we can declare it once and call it multiple times in a code
+- print, cloning are the names of function.
+
+
+Example of pipeline: simple hello world pipeline code:
+
+	pipeline {
+	    agent any 
+
+	    stages {
+	        stage('Hello') {
+	            steps {
+	                echo 'Hello World'
+	            }
+	        }
+	        stage('Goodbye') {
+	            steps {
+	                echo 'Goodbye World'
+	            }
+	        }
+	    }
+	}
+
+- it is necessary to add "pipeline", "agent any" etc words to the pipeline.
+- Console output:
+
+	Started by user Suraj
+	[Pipeline] Start of Pipeline
+	[Pipeline] node
+	Running on Jenkins in /var/lib/jenkins/workspace/a-myfirstpipeline
+	[Pipeline] {
+	[Pipeline] stage
+	[Pipeline] { (Hello)
+	[Pipeline] echo
+	Hello World
+	[Pipeline] }
+	[Pipeline] // stage
+	[Pipeline] stage
+	[Pipeline] { (Goodbye)
+	[Pipeline] echo
+	Goodbye World
+	[Pipeline] }
+	[Pipeline] // stage
+	[Pipeline] }
+	[Pipeline] // node
+	[Pipeline] End of Pipeline
+	Finished: SUCCESS
+
+- This will be added in jobs directory:
+
+	:/var/lib/jenkins/jobs# pwd
+	/var/lib/jenkins/jobs
+
+	:/var/lib/jenkins/jobs# ls
+	a-myfirstpipeline  a-projectclone  gitclonejob  myfirstjob  newbuild  test  testpipeline
+
+- a-myfirstpipeline gets created.
+
+	# tree a-myfirstpipeline/
+	a-myfirstpipeline/
+	├── builds
+	│   ├── 1
+	│   │   ├── build.xml
+	│   │   ├── log
+	│   │   ├── log-index
+	│   │   ├── pipeline-graph-view-allsteps.v3.json
+	│   │   ├── pipeline-graph-view-tree.v3.json
+	│   │   └── workflow-completed
+	│   │       └── flowNodeStore.xml
+	│   └── permalinks
+	├── config.xml
+	└── nextBuildNumber
+
+	4 directories, 9 files
+	root@ip-172-31-38-71:/var/lib/jenkins/jobs#
+
+--------
+
+example 2:
+
+
+Git cloning using pipeline:
+
+	pipeline {
+    agent any 
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clones the repository into the workspace
+                git url: 'https://github.com', branch: 'main'
+            }
+        }
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
+
+
+Build now: Output:
+
+	Started by user Suraj
+	[Pipeline] Start of Pipeline
+	[Pipeline] node
+	Running on Jenkins in /var/lib/jenkins/workspace/newpipeline
+	[Pipeline] {
+	[Pipeline] stage
+	[Pipeline] { (Checkout)
+	[Pipeline] git
+	The recommended git tool is: NONE
+	No credentials specified
+	Cloning the remote Git repository
+	Cloning repository https://github.com/raskars/pharmaproject.git
+	 > git init /var/lib/jenkins/workspace/newpipeline # timeout=10
+	Fetching upstream changes from https://github.com/raskars/pharmaproject.git
+	 > git --version # timeout=10
+	 > git --version # 'git version 2.53.0'
+	 > git fetch --tags --force --progress -- https://github.com/raskars/pharmaproject.git +refs/heads/:refs/remotes/origin/ # timeout=10
+	 > git config remote.origin.url https://github.com/raskars/pharmaproject.git # timeout=10
+	 > git config --add remote.origin.fetch +refs/heads/:refs/remotes/origin/ # timeout=10
+	Avoid second fetch
+	 > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+	Checking out Revision 03cc07ea195fdea8741efcd64f298bd550ddef68 (refs/remotes/origin/master)
+	 > git config core.sparsecheckout # timeout=10
+	 > git checkout -f 03cc07ea195fdea8741efcd64f298bd550ddef68 # timeout=10
+	 > git branch -a -v --no-abbrev # timeout=10
+	 > git checkout -b master 03cc07ea195fdea8741efcd64f298bd550ddef68 # timeout=10
+	Commit message: "Create test.html"
+	First time build. Skipping changelog.
+	[Pipeline] }
+	[Pipeline] // stage
+	[Pipeline] stage
+	[Pipeline] { (Hello)
+	[Pipeline] echo
+	Hello World
+	[Pipeline] }
+	[Pipeline] // stage
+	[Pipeline] }
+	[Pipeline] // node
+	[Pipeline] End of Pipeline
+	Finished: SUCCESS
+
+---------------------------------------------
+
+Jenkins pipeline syntax tutorial : https://www.jenkins.io/doc/book/pipeline/syntax/
+read about: agent, stage, steps, 
+
+---------------------------------------------
+
+===================================================================================================================================
+
+
+- Jenkins also has the Credentials feature
+- We can store credentials of multiple servers to the jenkins, which we can later used in freestyle, pipelines code
+- The Jenkins Credentials feature is a built-in, secure storage system designed to keep your sensitive data hidden and protected.
+- Instead of typing passwords, private keys, or API tokens directly into your Jenkins scripts or code (which is a major security risk), you store them securely inside Jenkins. You can then reference them in your build jobs using a unique ID.
+
+Jenkins -> Manage Jenkins -> Security -> Credentials
+
+- There are multiple options to add the credentials, such as:
+
+	- username & password
+	- GitHub app
+	- SSH Username & private key
+	- secret file
+	- secret text
+	- Certificate
+
+- Creating Credentials:
+-------------------------
+
+Jenkins -> Manage Jenkins -> Security -> Credentials -> Add Credentials -> Select "SSH Username & Private key"
+
+	- Add username
+	- Add id
+	- private key -> Enter Directly -> paste the .pem file contents
+
+- Then go to your pipeline and needs to add the sshagent step into it:
+- Additionally, if we want to run any linux commmand in jenkins pipeline then we need to add the "sh" keyword in pipeline, sh meaning shell command (linux command):
+	
+	sh 'df -h'
+
+- If we want useeiifcbfhfldvrrftkdkbnfluhedkfgninkugrvndvbjf
+ multiple linux commands then the format will be like:
+
+	sh'''
+		df -h, ls, lsblk
+	'''
+
+- Previous template (without sshagent):
+
+		pipeline {
+	    agent any
+
+	    stages {
+	        stage('Clone from GitHub') {
+	            steps {
+	                git branch: 'main', url: 'https://github.com/sadhixadmin/pharmaproject.git'
+	            }
+	        }
+
+	        stage('Deploy to Nginx Server') {
+	            steps {
+	                sh '''
+	                    echo "Deploying index.html to remote Nginx server..."
+	                    scp -o StrictHostKeyChecking=no index.html ubuntu@54.167.2.201:/var/www/html/
+	                    echo "Deployment completed successfully!"
+	                '''
+	            }
+	        }
+	    }
+	}
+
+
+After adding the sshagent:
+
+		pipeline {
+	    agent any
+
+	    stages {
+	        stage('Clone from GitHub') {
+	            steps {
+	                git branch: 'master', url: 'https://github.com/raskars/pharmaproject.git'
+	            }
+	        }
+
+	        stage('Deploy to Nginx Server') {
+	            steps {
+	                sshagent(credentials: ['cred-1']) {
+	                sh '''
+	                    echo "Deploying index.html to remote Nginx server..."
+	                    scp -o StrictHostKeyChecking=no index.html ubuntu@3.109.143.230:/var/www/html/
+	                    echo "Deployment completed successfully!"
+	                '''
+	                }
+	            }
+	        }
+	    }
+	}
+
+
+- Output of successful build:
+
+	Started by user Suraj
+	[Pipeline] Start of Pipeline
+	[Pipeline] node
+	Running on Jenkins in /var/lib/jenkins/workspace/mysecondpipeline
+	[Pipeline] {
+	[Pipeline] stage
+	[Pipeline] { (Clone from GitHub)
+	[Pipeline] git
+	The recommended git tool is: NONE
+	No credentials specified
+	 > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/mysecondpipeline/.git # timeout=10
+	Fetching changes from the remote Git repository
+	 > git config remote.origin.url https://github.com/raskars/pharmaproject.git # timeout=10
+	Fetching upstream changes from https://github.com/raskars/pharmaproject.git
+	 > git --version # timeout=10
+	 > git --version # 'git version 2.53.0'
+	 > git fetch --tags --force --progress -- https://github.com/raskars/pharmaproject.git +refs/heads/:refs/remotes/origin/ # timeout=10
+	 > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+	Checking out Revision 03cc07ea195fdea8741efcd64f298bd550ddef68 (refs/remotes/origin/master)
+	 > git config core.sparsecheckout # timeout=10
+	 > git checkout -f 03cc07ea195fdea8741efcd64f298bd550ddef68 # timeout=10
+	 > git branch -a -v --no-abbrev # timeout=10
+	 > git branch -D master # timeout=10
+	 > git checkout -b master 03cc07ea195fdea8741efcd64f298bd550ddef68 # timeout=10
+	Commit message: "Create test.html"
+	 > git rev-list --no-walk 03cc07ea195fdea8741efcd64f298bd550ddef68 # timeout=10
+	[Pipeline] }
+	[Pipeline] // stage
+	[Pipeline] stage
+	[Pipeline] { (Deploy to Nginx Server)
+	[Pipeline] sshagent
+	[ssh-agent] Using credentials ubuntu
+	$ ssh-agent
+	SSH_AUTH_SOCK=/var/lib/jenkins/.ssh/agent/s.rZqVJdREMN.agent.AEZK82m9ZA
+	SSH_AGENT_PID=2605
+	Running ssh-add (command line suppressed)
+	[ssh-agent] Started.
+	[Pipeline] {
+	[Pipeline] sh
+	+ echo Deploying index.html to remote Nginx server...
+	Deploying index.html to remote Nginx server...
+	+ scp -o StrictHostKeyChecking=no index.html ubuntu@3.109.143.230:/var/www/html/
+	+ echo Deployment completed successfully!
+	Deployment completed successfully!
+	[Pipeline] }
+	$ ssh-agent -k
+	unset SSH_AUTH_SOCK;
+	unset SSH_AGENT_PID;
+	echo Agent pid 2605 killed;
+	[ssh-agent] Stopped.
+	[Pipeline] // sshagent
+	[Pipeline] }
+	[Pipeline] // stage
+	[Pipeline] }
+	[Pipeline] // node
+	[Pipeline] End of Pipeline
+	Finished: SUCCESS
+
+- Verified on webserver:
+	
+	:/var/lib/jenkins/jobs# ls
+	a-myfirstpipeline  a-projectclone  gitclonejob  myfirstjob  mysecondpipeline  newbuild  newpipeline  test  testpipeline
+
+	:/var/lib/jenkins/jobs# tree mysecondpipeline/
+	mysecondpipeline/
+	├── builds
+	│   ├── 5
+	│   │   ├── build.xml
+	│   │   ├── changelog11625384068622383365.xml
+	│   │   ├── log
+	│   │   ├── log-index
+	│   │   ├── pipeline-graph-view-allsteps.v3.json
+	│   │   ├── pipeline-graph-view-tree.v3.json
+	│   │   └── workflow-completed
+	│   │       └── flowNodeStore.xml
+	│   └── permalinks
+	├── config.xml
+	└── nextBuildNumber
+
+	4 directories, 10 files
+
+- In above build, we have used "StrictHostKeyChecking=no", tells your SSH client to automatically accept and add new host keys to your known_hosts file without prompting you. 
+
+- All these can be done using Jenkins-cli, it uses XML & java coding but it is not recommended.eiifcbfhfldvgfbuhgbdglneegichkulkivbkbccluik
+
+------------------------------------------------------------------------------------------------------------------------------
+
+- install "Pipeline: Stage View" plugin, to view the pipeline as stage wise, it will show the stage wise logs as well.
+
+
+New TASK:
+----------
+
+Adding nodejs server to the pipeline, code will now deploy to app server(nodejs) directly.
+
+1. Create app server
+2. install nodejs package
+3. add sample code
+
+	# pwd
+	/opt/nodejsproj
+
+	# cat app.js 
+	const http = require("http");
+
+	const server = http.createServer((req, res) => {
+
+	    if (req.url === "/" && req.method === "GET") {
+	        res.writeHead(200, { "Content-Type": "text/html" });
+	        res.end("Hello World");
+	    }
+
+	});
+
+	server.listen(3000, () => {
+	    console.log("Server running on port 3000");
+	});
+
+4. start nodejs service:
+
+	# nodejs app.js 
+	Server running on port 3000
+
+5. it will hung, so we need to add "&" so that we will have our shell, basically it will execute the nodejs program at background:
+
+	# nodejs app.js &
+	[1] 1698
+	root@ip-172-31-40-129:/opt/nodejsproj# Server running on port 3000
+
+6. confirm port is opened:
+
+	# lsof -i :3000
+	COMMAND  PID USER FD   TYPE DEVICE SIZE/OFF NODE NAME
+	nodejs  1698 root 21u  IPv6  13704      0t0  TCP *:3000 (LISTEN)
+
+7. test via curl via localhost:
+
+	# curl http://localhost:3000
+	Hello World
+
+8. to check if the process running at background:
+
+	# bg
+	-bash: bg: job 1 already in background
+
+9. to kill the process:
+
+	# lsof -i :3000
+	COMMAND  PID USER FD   TYPE DEVICE SIZE/OFF NODE NAME
+	nodejs  1698 root 21u  IPv6  13704      0t0  TCP *:3000 (LISTEN)
+
+	:/opt/nodejsproj# kill -9 1698
+	[1]+  Killed                     nodejs app.js
+	
+	:/opt/nodejsproj# lsof -i :3000
+	:/opt/nodejsproj#
+
+10. to view it from browser:
+
+	http://<public ip>:3000
+
+	- need to allow 3000 port in inbound security rule.
+
+11. to run these nodejs service as deamon, we need to install the pm2 package, so that we can start, stop nodejs easily without killing the nodejs process every-time.
+
+	- for that we first need to install the npm
+	- npm helps downloading the content from the internet (just like plugins)
+
+	# apt install npm
+
+12. now configure pm2:
+
+	- PM2 is a production process manager for Node.js that keeps your application running forever, reloads it without downtime, and helps you manage logs.
+
+	# npm install pm2
+
+13. start using pm2:
+
+	# pm2 start app.js
+
+	[PM2] Spawning PM2 daemon with pm2_home=/root/.pm2
+	[PM2] PM2 Successfully daemonized
+	[PM2] Starting /opt/nodejsproj/app.js in fork_mode (1 instance)
+	[PM2] Done.
+	┌────┬────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+	│ id │ name   │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+	├────┼────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+	│ 0  │ app    │ default     │ N/A     │ fork    │ 7794     │ 0s     │ 0    │ online    │ 0%       │ 38.8mb   │ root     │ disabled │
+	└────┴────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+
+	# pm2 status app.js
+	┌────┬────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+	│ id │ name   │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+	├────┼────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+	│ 0  │ app    │ default     │ N/A     │ fork    │ 7794     │ 104s   │ 0    │ online    │ 0%       │ 69.6mb   │ root     │ disabled │
+	└────┴────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+	host metrics | cpu: 0.1% | ram usage: 8% | disk: ⇓ 0mb/s ⇑ 0.001mb/s
+
+14. to stop the nodejs process:
+
+	# pm2 stop app.js
+	[PM2] Applying action stopProcessId on app [app.js](ids: [ 0 ])
+	[PM2] [app](0) ✓
+	┌────┬────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+	│ id │ name   │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+	├────┼────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+	│ 0  │ app    │ default     │ N/A     │ fork    │ 0        │ 0      │ 0    │ stopped   │ 0%       │ 0b       │ root     │ disabled │
+	└────┴────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+	host metrics | cpu: 1.1% | ram usage: 8% | ens5: ⇓ 0.001mb/s ⇑ 0.001mb/s | disk: ⇓ 0mb/s ⇑ 0.017mb/s
+
+===================================================================================================================================
