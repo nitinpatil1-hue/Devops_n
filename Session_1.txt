@@ -1,0 +1,96 @@
+
+
+OS - collection of multiple components
+
+
+OS different environmaent :
+
+- Physical
+- Virtual
+
+cloud - citrix zen
+
+1st Way -----------------
+
+Physical server > Linux OS
+
+2nd Way---------------
+
+Virtulization / Hypervisor
+
+2a)
+Type 1: 
+Physical server > VMware esxi (customize linux os) > OS
+
+2b)
+Type 2 : 
+physical server > Windows OS> VMware > Virtual machine > OS
+
+
+3rd Way - Cloud---
+
+Cloud Acc > Physical server(BareMetal) > Virtulization (Xen) > virual machine > OS
+
+
+4th Way ---------
+
+4a)
+Physical Server > Virtualization (Type1) > Linux OS > Container (Docker) > multiple OS
+
+4b)
+Physical Server > Linux OS > Container (docker) > Multiple OS
+
+
+4c) 
+Physical Server > Virtualization (Xen physical) > Linux OS > Docker engine > Container > multiple os
+
+
+4d)
+Physical Server > Virtualization (Xen physical) > ECS (elastic container service) > Container > multiple os
+
+
+------WEBSITE HOSTING------------------
+
+Que -
+
+What is difference between Apache and Ngnix
+
+
+Virtual Machine  = Instance
+
+EC2 Service - Elastic Compute Cloud
+
+what is diff btn Compute Cloud and cloud compute
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
