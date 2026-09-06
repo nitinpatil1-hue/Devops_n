@@ -1,0 +1,83 @@
+
+GIT - Source code management software  -- SCM
+
+------------------
+1) Working Directory:
+
+-actual project code where changes are making
+
+# touch
+# git restore filename (restore file from staging area)
+# ls -la (to check .git folder and all hidden files)
+
+-----------------
+2) Staging Area: (tracked/ untracked files)
+
+# git add .
+# git status
+# git rm --cached index.html
+
+-temp storing area, changes selected for the next commit
+
+-can restore file from staging area to working directory
+
+-The main reason is to select exactly you what to commit
+
+-----------------
+3) Commit: (Final committed  files)
+
+# git commit -m "This is My first commit"   (Wil ask to enter username and email)
+
+/opt/travelproject/.git/config  ( Needs to update info manually) OR
+
+# git config --global user.name ramu
+# git config --global user.email ramu@gmail.com
+
+# cat /root/.gitconfig
+# git show  (to check latest commit)
+# git ls -files ( to check all committed files)
+# git log ( all log with details)
+
+------------------
+4) GitHub (centralized SCM Repository over internet)
+
+Own by Microsoft
+
+Need to create GitHub acc:
+
+Username : kodalkarsj
+
+https://github.com/kodalkarsj/MyFirstRepo.git
+
+Projects = Repository
+
+IF whole project deleted then no use of commit. so need to add on GitHub to save full project.
+
+Need to add repo link into below file in local machine
+
+/opt/travelproject/.git/config
+
+# git remote add origin https://github.com/kodalkarsj/MyFirstRepo.git
+
+Note : only 1 URL can add in config file
+
+# git push -u origin master
+
+Username : kodalkarsj
+Password :              (Need to generate token key)
+
+Acc > Settings > Developer setting > Personal access token > Tokens (classic) > Generate new token > classic >
+> Enter Name > click on repo >Generate 
+
+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
+
+GitHub > Repository > Click on Repository   -- check latest files
+
+
+---------------------------------
+Que:
+-How to read file in staging area?
+-How to user GitHub without internet?
+
+
+

@@ -1,0 +1,125 @@
+
+Github Project clone webserver using jenkins freestyle Project method
+
+Server 1 : jenkins
+Server 2 : Webserver
+
+-------------------------------
+Server 1 Setup :
+
+ssh protocol plugins needs to install in jenkins.
+
+Manage jenkins > plugins > available plugins
+ssh server
+ssh pipeline
+
+------
+create templete :
+
+Manage jenkins > System > ssh > SSH Server > add 
+
+Name 
+Hostname = server 2 IP
+username = server 2 username
+remote directory = /
+
+Advanced 
+enter server 2 key
+
+Test configuration > save
+
+-------
+Jenkins > Projects > Environmnent > send files or execute commands over before the build starts
+
+Source files : *
+Remote Directory : /var/www/html
+
+Save
+
+------------------------------------------------
+Server 2 :
+
+provide permission to /var/www/html
+
+#chmod o+g /var/www/html
+
+----------
+
+New Topic > How to run project using pipeline
+
+Pipeline is auomated sequence of steps that takes application code from devlopment  > testing > deployment.
+
+Jenkins  > New Items > MyFirstPipeline > Okay
+
+Configure > Pipeline > Code 
+
+[Jenkinsfile > structure > block or directive , stage , step]
+
+default Language - Groovy scrips - java based lang
+
+Pipeline as code Methods 
+
+scripted Pipeline  
+started with code word
+
+declarative pipeline
+started with pipeline word
+
+----------
+Jenkins file block
+
+pipeline
+{
+agent any
+
+	stages {
+		stage ('print') {
+	
+			step {  actual code
+		}
+	
+}
+	stage ('clonning'){
+}
+}
+}
+
+Save > build now
+
+check on server :
+/var/lib/jenkins/jobs
+
+------------------
+
+Sample git clone pipeline
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/khotrakesh94/ecommerce.git'
+            }
+        }
+    }
+}
+
+save > build now
+---------------------------------------
+
+check jenkins pipeline syntax toutorials
+https://www.jenkins.io/doc/book/pipeline/syntax/
+
+
+----------------
+HW -
+Scripted vs declarative methods
+
+
+
+
+
+
+

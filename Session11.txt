@@ -1,0 +1,202 @@
+
+Jenkins Pipeline Credentials
+
+In Jenkins, credentials are securely stored pieces of information that Jenkins uses to authenticate with other systems
+
+Manage Jenkins > credentials > Add > SSH username with private key 
+
+ID - nginxwebcreds
+Desc - any
+username - ubuntu
+private key - enter private key
+
+> Create 
+
+What is Jenkins CLI?
+Jenkins CLI (Command Line Interface) is a tool that lets you interact with Jenkins from a terminal/command prompt instead of using the Jenkins web UI.
+
+-----------------
+MySecondPipeline Project
+
+Add below code :
+
+pipeline {
+	    agent any
+
+	    stages {
+	        stage('Clone from GitHub') {
+	            steps {
+	                git branch: 'main', url: 'https://github.com/khotrakesh94/MyFinanceProject.git'
+	            }
+	        }
+
+	        stage('Deploy to Nginx Server') {
+	            steps {
+	                sshagent(credentials: ['nginx-creds']) {
+	                sh '''
+	                    echo "Deploying index.html to remote Nginx server..."
+	                    scp -o StrictHostKeyChecking=no index.html ubuntu@13.126.222.220:/var/www/html/
+	                    echo "Deployment completed successfully!"
+	                '''
+	                }
+	            }
+	        }
+	    }
+	}
+	
+Build Now > Console Output : 
+
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/MySecondPipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Clone from GitHub)
+[Pipeline] git
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/MySecondPipeline/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/khotrakesh94/MyFinanceProject.git # timeout=10
+Fetching upstream changes from https://github.com/khotrakesh94/MyFinanceProject.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+ > git fetch --tags --force --progress -- https://github.com/khotrakesh94/MyFinanceProject.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 3741f12279f171426b7dd7358e26eec50576a914 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 3741f12279f171426b7dd7358e26eec50576a914 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main 3741f12279f171426b7dd7358e26eec50576a914 # timeout=10
+Commit message: "This commit by Rohit"
+ > git rev-list --no-walk 3741f12279f171426b7dd7358e26eec50576a914 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Nginx Server)
+[Pipeline] sshagent
+[ssh-agent] Using credentials ubuntu (nginx-creds)
+$ ssh-agent
+SSH_AUTH_SOCK=/var/lib/jenkins/.ssh/agent/s.yeCJ32g2dy.agent.GaVohfKuKT
+SSH_AGENT_PID=13409
+Running ssh-add (command line suppressed)
+[ssh-agent] Started.
+[Pipeline] {
+[Pipeline] sh
++ echo Deploying index.html to remote Nginx server...
+Deploying index.html to remote Nginx server...
++ scp -o StrictHostKeyChecking=no index.html ubuntu@13.126.222.220:/var/www/html/
++ echo Deployment completed successfully!
+Deployment completed successfully!
+[Pipeline] }
+$ ssh-agent -k
+unset SSH_AUTH_SOCK;
+unset SSH_AGENT_PID;
+echo Agent pid 13409 killed;
+[ssh-agent] Stopped.
+[Pipeline] // sshagent
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
+
+Note : 
+
+1) if we want to run linux commands in jenkins then use sh before command
+# sh touch
+
+2) to run multiple commmand in one go then
+# sh ''' ls df-h touch '''
+
+3)
+scp -o StrictHostKeyChecking=no
+is commonly used in Jenkins when Jenkins needs to copy files to or from 
+a remote server over SSH without getting stuck on the SSH host-key confirmation prompt
+------------------
+
+If want to stage wise logs then need to install pipeline stage view plugins
+
+-------------------------------------------------------------------------------------
+
+Nodejs Project on application server : 
+
+Launch App Server
+Install Nodejs
+
+cd /opt/nodejsproject1/app.js
+
+
+app.js 
+-----
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+
+    if (req.url === "/" && req.method === "GET") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end("Hello World");
+    }
+
+});
+
+server.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+--------
+to start nodejs
+
+#nodejs app.js &
+#curl http://localhost:3000
+
+Hello World
+
+To stop nodejs
+
+# jobs
+# lsof -i:3000
+# kill -9 PID
+
+To open code from nodejs
+
+add inbound rule port 3000
+
+URL: http//publicIP:3000
+
+Note : nodejs service should be running in backend.
+
+---------
+
+To Start service as deamons:
+
+NPM (Node Package Manager)
+It is the default package manager that comes with Node.js.
+Its main purpose is to install, manage, and share JavaScript packages/libraries that your Node.js application needs.
+
+#apt install nodejs npm
+
+PM2 is a process manager for Node.js applications
+
+#npm install pm2 -g
+ 
+#pm2 start app.js
+
+root@MyApp-1:/opt/nodejsproject1# pm2 start app.js
+[PM2] Starting /opt/nodejsproject1/app.js in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name   │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ app    │ fork     │ 0    │ online    │ 0%       │ 19.1mb   │
+└────┴────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+host metrics | cpu: 1.4% | ram usage: 41.4%
+root@MyApp-1:/opt/nodejsproject1#
+
+
+
+Hw
+how to manage username password in jenkins?
